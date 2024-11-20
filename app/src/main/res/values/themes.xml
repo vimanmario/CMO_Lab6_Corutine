@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.CMO_Lab6_CorutineKotlin" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
