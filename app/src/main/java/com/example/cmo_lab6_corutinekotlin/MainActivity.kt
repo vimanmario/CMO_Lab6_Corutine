@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.rememberAsyncImagePainter
 import com.example.cmo_lab6_corutinekotlin.ui.theme.CMO_Lab6_CorutineKotlinTheme
@@ -26,11 +27,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // Folosim tema implicită fără culori personalizate
             MaterialTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background // Folosim tema implicită
+                    color = MaterialTheme.colors.background
                 ) {
                     ImageGrid(viewModel)
                 }
@@ -39,19 +39,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun ImageGrid(viewModel: ImageViewModel) {
     val imageState by viewModel.images.collectAsState()
 
     when (imageState) {
-        is ImageState.Loading -> {
-            // Afișează un indicator de încărcare
-            LoadingIndicator()
-        }
-        is ImageState.Error -> {
-            // Afișează mesajul de eroare
-            ErrorMessage((imageState as ImageState.Error).message)
-        }
+        is ImageState.Loading -> LoadingIndicator()
+        is ImageState.Error -> ErrorMessage((imageState as ImageState.Error).message)
         is ImageState.Success -> {
             val images = (imageState as ImageState.Success).images
             LazyVerticalGrid(
@@ -59,9 +54,8 @@ fun ImageGrid(viewModel: ImageViewModel) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(images.size) { index ->
-                    val imageUrl = "http://cti.ubm.ro/cmo/digits/${images[index]}"
                     Image(
-                        painter = rememberAsyncImagePainter(imageUrl),
+                        bitmap = images[index].asImageBitmap(),
                         contentDescription = "Digit Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
@@ -72,14 +66,20 @@ fun ImageGrid(viewModel: ImageViewModel) {
     }
 }
 
+
+
 @Composable
 fun LoadingIndicator() {
-    // Afișează un indicator de încărcare
     CircularProgressIndicator(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
 fun ErrorMessage(message: String) {
-    // Afișează mesajul de eroare
-    Text(text = "Error: $message")
+    Text(
+        text = "Error: $message",
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colors.error,
+        style = MaterialTheme.typography.h6
+    )
 }
+

@@ -74,6 +74,9 @@ dependencies {
     // implementation 'androidx.compose.material:material-ripple-android:1.8.0-alpha06'
     // implementation 'androidx.compose.runtime:runtime-saveable-android:1.8.0-alpha06'
 
+    implementation 'org.jsoup:jsoup:1.16.1'
+
+
     // Coil pentru imagini
     implementation "io.coil-kt:coil-compose:2.4.0"
 
